@@ -2,9 +2,10 @@ import { useRef, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { exportDb, importDb } from "../api/client";
 import { getHideUnsupported, setHideUnsupported } from "../lib/demo";
+import { APP_NAME } from "../config";
 
 // Settings for the browser-only demo: toggle the "Full version only" badges and
-// back up / restore the whole library. Alfad keeps everything in localStorage,
+// back up / restore the whole library. This demo keeps everything in localStorage,
 // so export/import is the only backup there is.
 export default function SettingsDialog({ onClose }: { onClose: () => void }) {
   const qc = useQueryClient();
@@ -23,7 +24,7 @@ export default function SettingsDialog({ onClose }: { onClose: () => void }) {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `alfad-backup-${new Date().toISOString().slice(0, 10)}.json`;
+    a.download = `${APP_NAME}-backup-${new Date().toISOString().slice(0, 10)}.json`;
     a.click();
     URL.revokeObjectURL(url);
   }
@@ -43,8 +44,8 @@ export default function SettingsDialog({ onClose }: { onClose: () => void }) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center" onClick={onClose}>
-      <div className="bg-zinc-900 border border-zinc-700 rounded-lg p-4 w-[26rem]" onClick={e => e.stopPropagation()}>
+    <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4" onClick={onClose}>
+      <div className="bg-zinc-900 border border-zinc-700 rounded-lg p-4 w-full max-w-md max-h-[90dvh] overflow-y-auto" onClick={e => e.stopPropagation()}>
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-sm font-medium">Settings</h2>
           <button onClick={onClose} className="text-zinc-500 hover:text-zinc-100">×</button>

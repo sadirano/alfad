@@ -1,23 +1,25 @@
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-import { api, ApiError, ItemCreate, ItemStatus } from "../api/client";
+import { api, ApiError, ItemCreate, ItemStatus, Space } from "../api/client";
 import { DEFAULT_LABELS, STATUSES } from "../lib/status";
 import TagInput from "./TagInput";
 
 interface Props {
+  activeSpace?: Space;
   onClose: () => void;
 }
 
 type Mode = "url" | "file" | "note";
 
-export default function AddItemDialog({ onClose }: Props) {
+export default function AddItemDialog({ activeSpace, onClose }: Props) {
   const [mode, setMode] = useState<Mode>("url");
   const [url, setUrl] = useState("");
   const [filePath, setFilePath] = useState("");
   const [noteTitle, setNoteTitle] = useState("");
-  const [noteBody, setNoteBody] = useState("");
-  const [tags, setTags] = useState<string[]>([]);
+  const [noteBody, setNoteBody] = useState(activeSpace?.note_template_md || "");
+  // Pre-fill the active space's required tags so a new item lands in that space.
+  const [tags, setTags] = useState<string[]>(activeSpace?.tags ?? []);
   const [status, setStatus] = useState<ItemStatus>("plan");
   const [dupId, setDupId] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -53,7 +55,7 @@ export default function AddItemDialog({ onClose }: Props) {
 
   return (
     <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4" onClick={onClose}>
-      <div className="bg-zinc-900 border border-zinc-800 rounded-lg w-full max-w-xl p-4" onClick={e => e.stopPropagation()}>
+      <div className="bg-zinc-900 border border-zinc-800 rounded-lg w-full max-w-xl p-4 max-h-[90dvh] overflow-y-auto" onClick={e => e.stopPropagation()}>
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-lg font-semibold">Add to library</h2>
           <button onClick={onClose} className="text-zinc-400 hover:text-zinc-100">×</button>
