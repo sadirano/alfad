@@ -55,7 +55,7 @@ export default function AddItemDialog({ activeSpace, onClose }: Props) {
 
   return (
     <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4" onClick={onClose}>
-      <div className="bg-zinc-900 border border-zinc-800 rounded-lg w-full max-w-xl p-4" onClick={e => e.stopPropagation()}>
+      <div className="bg-zinc-900 border border-zinc-800 rounded-lg w-full max-w-xl p-4 max-h-[90dvh] overflow-y-auto" onClick={e => e.stopPropagation()}>
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-lg font-semibold">Add to library</h2>
           <button onClick={onClose} className="text-zinc-400 hover:text-zinc-100">×</button>

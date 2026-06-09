@@ -44,8 +44,8 @@ export default function SettingsDialog({ onClose }: { onClose: () => void }) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center" onClick={onClose}>
-      <div className="bg-zinc-900 border border-zinc-700 rounded-lg p-4 w-[26rem]" onClick={e => e.stopPropagation()}>
+    <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4" onClick={onClose}>
+      <div className="bg-zinc-900 border border-zinc-700 rounded-lg p-4 w-full max-w-md max-h-[90dvh] overflow-y-auto" onClick={e => e.stopPropagation()}>
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-sm font-medium">Settings</h2>
           <button onClick={onClose} className="text-zinc-500 hover:text-zinc-100">×</button>
