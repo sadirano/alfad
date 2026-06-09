@@ -46,7 +46,7 @@ export default function AiInput({
   const filteredTemplates = templates.filter(t => t.name.toLowerCase().includes(mentionQuery.toLowerCase()));
 
   function handleKeyDown(e: React.KeyboardEvent) {
-    if (!mentionOpen) return;
+    if (!mentionOpen || filteredTemplates.length === 0) return;
     
     if (e.key === "ArrowDown") {
       e.preventDefault();
