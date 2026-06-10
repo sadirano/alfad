@@ -8,7 +8,7 @@ import { DEFAULT_LABELS, STATUSES } from "../lib/status";
 import TagInput from "../components/TagInput";
 import AiInput from "../components/AiInput";
 import FullVersionBadge from "../components/FullVersionBadge";
-import { BACKEND_AVAILABLE } from "../lib/demo";
+import { BACKEND_AVAILABLE, useHideUnsupported } from "../lib/demo";
 import { STORAGE_PREFIX } from "../config";
 
 const DEFAULT_LEFT_W = 280;
@@ -154,6 +154,8 @@ export default function ItemDetail() {
   const thumbFileRef = useRef<HTMLInputElement>(null);
   const attachFileRef = useRef<HTMLInputElement>(null);
   const notesCursor = useRef(0);
+
+  const hideUnsupported = useHideUnsupported();
 
   const [thumbEdit, setThumbEdit] = useState(false);
   const [thumbInput, setThumbInput] = useState("");
@@ -442,7 +444,7 @@ export default function ItemDetail() {
               </div>
             </a>
           ) : item.kind === "file" && item.file_path ? (
-            <video src={`file:///${item.file_path}`} controls className="w-full h-full" />
+            <video src={`file:///${item.file_path.replace(/^\/+/, "")}`} controls className="w-full h-full" />
           ) : item.thumbnail_url ? (
             <img src={item.thumbnail_url} alt={item.title} className="w-full h-full object-contain" />
           ) : item.url ? (
@@ -747,7 +749,7 @@ export default function ItemDetail() {
           </div>
         </div>
       )}
-      <div>
+      {(BACKEND_AVAILABLE || !hideUnsupported) && <div>
         <div className="flex items-center justify-between mb-1">
           <label className="text-xs text-zinc-400">files</label>
           {BACKEND_AVAILABLE ? (
@@ -797,7 +799,7 @@ export default function ItemDetail() {
             ))}
           </div>
         )}
-      </div>
+      </div>}
       {item.needs_enrichment && (
         <div className="text-xs text-amber-300 bg-amber-950/40 border border-amber-900 rounded p-2">
           Enrichment failed. Try "Re-fetch metadata" in the ... menu.

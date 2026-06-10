@@ -667,7 +667,7 @@ export const api = {
     return Promise.resolve(clone(out));
   },
 
-  createSpace: (name: string, namespaces: string[], tags: string[], labels?: Record<string, string> | null) => {
+  createSpace: (name: string, namespaces: string[], tags: string[], labels?: Record<string, string> | null, templates?: Template[]) => {
     const db = loadDb();
     const s: Space = {
       id: ++db.seq,
@@ -676,7 +676,7 @@ export const api = {
       tags: [...tags].sort(),
       labels: labels && Object.keys(labels).length ? labels : null,
       note_template_md: "",
-      templates: [],
+      templates: templates ?? [],
       created_at: nowIso(),
     };
     db.spaces.push(s);
