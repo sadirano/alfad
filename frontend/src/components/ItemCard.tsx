@@ -65,7 +65,7 @@ function TagEditorPopover({ item, onSave, onClose, className }: {
   // Save & close on outside click. Re-bound on every `tags` change so the
   // handler closes over the latest selection.
   useEffect(() => {
-    function onDown(e: MouseEvent) {
+    function onDown(e: PointerEvent) {
       if (ref.current && !ref.current.contains(e.target as Node)) commit();
     }
     document.addEventListener("pointerdown", onDown);

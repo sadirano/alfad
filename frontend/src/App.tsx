@@ -495,8 +495,8 @@ export default function App() {
   });
 
   const createSpace = useMutation({
-    mutationFn: ({ name, namespaces, tags, labels }: { name: string; namespaces: string[]; tags: string[]; labels: Record<string, string> | null }) =>
-      api.createSpace(name, namespaces, tags, labels),
+    mutationFn: ({ name, namespaces, tags, labels, templates }: { name: string; namespaces: string[]; tags: string[]; labels: Record<string, string> | null; templates: Template[] }) =>
+      api.createSpace(name, namespaces, tags, labels, templates),
     onSuccess: () => { qc.invalidateQueries({ queryKey: ["spaces"] }); setCreatingSpace(false); },
   });
 
@@ -661,7 +661,7 @@ export default function App() {
       {adding && <AddItemDialog activeSpace={activeSpace} onClose={() => setAdding(false)} />}
       {creatingSpace && (
         <SpaceDialog
-          onSave={(name, namespaces, tags, labels, templates) => createSpace.mutate({ name, namespaces, tags, labels })}
+          onSave={(name, namespaces, tags, labels, templates) => createSpace.mutate({ name, namespaces, tags, labels, templates })}
           onClose={() => setCreatingSpace(false)}
         />
       )}

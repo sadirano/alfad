@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { api, Template } from "../api/client";
-import { BACKEND_AVAILABLE } from "../lib/demo";
+import { BACKEND_AVAILABLE, useHideUnsupported } from "../lib/demo";
 import FullVersionBadge from "./FullVersionBadge";
 
 export default function AiInput({ 
@@ -21,6 +21,7 @@ export default function AiInput({
   const [mentionQuery, setMentionQuery] = useState("");
   const [mentionIndex, setMentionIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
+  const hideUnsupported = useHideUnsupported();
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -50,9 +51,11 @@ export default function AiInput({
     
     if (e.key === "ArrowDown") {
       e.preventDefault();
+      if (filteredTemplates.length === 0) return;
       setMentionIndex(i => (i + 1) % filteredTemplates.length);
     } else if (e.key === "ArrowUp") {
       e.preventDefault();
+      if (filteredTemplates.length === 0) return;
       setMentionIndex(i => (i - 1 + filteredTemplates.length) % filteredTemplates.length);
     } else if (e.key === "Enter" || e.key === "Tab") {
       e.preventDefault();
@@ -103,6 +106,10 @@ export default function AiInput({
       }, 0);
     }
   }
+
+  // AI note generation is backend-only. When the visitor opts to hide unsupported
+  // features, hide the whole input rather than just its "Full version only" badge.
+  if (!BACKEND_AVAILABLE && hideUnsupported) return null;
 
   return (
     <form onSubmit={submit} className="relative flex items-center mt-2 w-full">

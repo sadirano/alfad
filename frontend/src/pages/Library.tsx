@@ -129,6 +129,10 @@ export default function Library() {
     onSuccess: () => qc.invalidateQueries({ queryKey: ["items"] }),
   });
 
+  const hasActiveFilters = Boolean(
+    query.q || query.tags?.length || query.exclude_tags?.length || query.status_in?.length
+  );
+
   const gridClass = {
     normal: "grid gap-3 grid-cols-[repeat(auto-fill,minmax(220px,1fr))]",
     big: "grid gap-4 grid-cols-[repeat(auto-fill,minmax(340px,1fr))]",
@@ -199,7 +203,11 @@ export default function Library() {
           {isLoading ? (
             <div className="text-zinc-500">Loading…</div>
           ) : items.length === 0 ? (
-            <div className="text-zinc-500">Nothing here yet. Click <b>+ Add</b>.</div>
+            hasActiveFilters ? (
+              <div className="text-zinc-500">No items match your filters.</div>
+            ) : (
+              <div className="text-zinc-500">Nothing here yet. Click <b>+ Add</b>.</div>
+            )
           ) : (
             <div className={gridClass}>
               {items.map(it => (
